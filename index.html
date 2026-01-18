@@ -3,19 +3,8 @@
 
 <head>
     <script>
-        // Defensive script to define tronlinkParams before any other script access
-        try {
-            if (!window.tronlinkParams) {
-                Object.defineProperty(window, 'tronlinkParams', {
-                    value: {},
-                    writable: true,
-                    configurable: true,
-                    enumerable: true
-                });
-            }
-        } catch (e) {
-            console.warn('Failed to define tronlinkParams:', e);
-        }
+        // Defensive init for TronLink
+        window.tronlinkParams = window.tronlinkParams || {};
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
