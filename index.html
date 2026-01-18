@@ -5,146 +5,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Human 3.0 Diagnostic</title>
-    <!-- Standard Tailwind CSS for production -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #050505;
             --text-color: #fafafa;
             --glass-bg: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-hover-bg: rgba(255, 255, 255, 0.07);
-            --glass-hover-border: rgba(255, 255, 255, 0.2);
             --accent-muted: #a1a1a1;
-            --primary-gradient: linear-gradient(135deg, #ffffff 0%, #a1a1a1 100%);
-            --cta-glow: rgba(255, 255, 255, 0.15);
+            --zinc-deep: #18181b;
         }
 
         .light-theme {
-            --bg-color: #fcfcfc;
+            --bg-color: #f9f9f9;
             --text-color: #0a0a0a;
             --glass-bg: rgba(0, 0, 0, 0.03);
-            --glass-border: rgba(0, 0, 0, 0.08);
-            --glass-hover-bg: rgba(0, 0, 0, 0.06);
-            --glass-hover-border: rgba(0, 0, 0, 0.15);
+            --glass-border: rgba(0, 0, 0, 0.1);
             --accent-muted: #52525b;
-            --primary-gradient: linear-gradient(135deg, #000000 0%, #52525b 100%);
-            --cta-glow: rgba(0, 0, 0, 0.1);
+            --zinc-deep: #e4e4e7;
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
-
         .serif {
             font-family: 'Playfair Display', serif;
         }
-
         .glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background 0.4s ease, border 0.4s ease;
         }
-
-        .glass:hover {
-            background: var(--glass-hover-bg);
-            border-color: var(--glass-hover-border);
-            transform: translateY(-2px);
-        }
-
         .gradient-text {
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--text-color) 0%, var(--accent-muted) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
-
         .theme-transition {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Smooth scroll for the whole page */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-color);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--glass-border);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-muted);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0 var(--cta-glow); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-        
-        .cta-pulse {
-            animation: pulse-glow 2.5s infinite;
-        }
-        
-        /* Custom Utilities */
-        .rounded-3xl { border-radius: 1.5rem; }
-        .rounded-4xl { border-radius: 2.5rem; }
-        
-        /* Interactive element specific hovers */
-        .hover-lift {
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-        }
-        .hover-lift:hover {
-            transform: translateY(-4px) scale(1.01);
-        }
-        
-        .option-btn {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .option-btn::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: white;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .light-theme .option-btn::after {
-            background: black;
-        }
-        
-        .option-btn:active::after {
-            opacity: 0.1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
     </style>
 <script type="importmap">
