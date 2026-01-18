@@ -79,6 +79,7 @@ const App: React.FC = () => {
   const [analysis, setAnalysis] = useState<AssessmentResult | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<string | null>(null);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -93,6 +94,15 @@ const App: React.FC = () => {
   const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
 
   const t = TRANSLATIONS[lang];
+
+  const handleReset = useCallback(() => {
+    setAnswers({});
+    setCurrentIdx(0);
+    setAnalysis(null);
+    setSelectedLevel(null);
+    setStep('intro');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   const handleAnswer = (level: number) => {
     setSelectedLevel(level);
@@ -133,6 +143,34 @@ const App: React.FC = () => {
       console.error(e); 
       setStep('intro'); 
     }
+  };
+
+  const handleShareX = () => {
+    if (!analysis) return;
+    const text = lang === 'en' 
+      ? `I just completed my Human 3.0 diagnostic. 
+      \nMetatype: ${analysis.metatype}
+      \nArchetype: ${analysis.lifestyleArchetype}
+      \nAverage Level: ${analysis.averageLevel.toFixed(1)}/3.0
+      \n#Human3 #EvolutionaryBaseline`
+      : `我刚刚完成了我的 人类 3.0 诊断。
+      \n元类型：${analysis.metatype}
+      \n生活原型：${analysis.lifestyleArchetype}
+      \n平均等级：${analysis.averageLevel.toFixed(1)}/3.0
+      \n#人类3 #演化基准`;
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  };
+
+  const handleCopySummary = () => {
+    if (!analysis) return;
+    const summary = lang === 'en'
+      ? `HUMAN 3.0 DIAGNOSTIC REPORT\nMetatype: ${analysis.metatype}\nArchetype: ${analysis.lifestyleArchetype}\nAverage Level: ${analysis.averageLevel.toFixed(1)}\nHard Truth: ${analysis.theTruth}\nAction: ${analysis.immediateAction}`
+      : `人类 3.0 诊断报告\n元类型：${analysis.metatype}\n生活原型：${analysis.lifestyleArchetype}\n平均等级：${analysis.averageLevel.toFixed(1)}\n扎心真相：${analysis.theTruth}\n立即行动：${analysis.immediateAction}`;
+    
+    navigator.clipboard.writeText(summary);
+    setCopyStatus(TRANSLATIONS[lang].summaryCopied);
+    setTimeout(() => setCopyStatus(null), 2000);
   };
 
   const chartData = useMemo(() => 
@@ -311,15 +349,42 @@ const App: React.FC = () => {
             <h3 className="text-zinc-500 text-[10px] uppercase tracking-widest mb-6 font-bold">Glitch Assessment</h3>
             <p className="text-sm leading-relaxed font-light opacity-90">{analysis?.glitchAssessment}</p>
           </section>
+
+          <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button 
+              onClick={handleShareX}
+              className="w-full sm:w-auto px-10 py-4 bg-zinc-900 text-white dark:bg-white dark:text-black rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:scale-105 active:scale-95 transition-all shadow-xl flex items-center justify-center gap-3"
+            >
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+              {lang === 'en' ? 'Share to X' : '分享到 X'}
+            </button>
+            <button 
+              onClick={handleCopySummary}
+              className="w-full sm:w-auto px-10 py-4 glass border-zinc-500/30 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+              </svg>
+              {copyStatus || (lang === 'en' ? 'Copy Summary' : '复制摘要')}
+            </button>
+            <button 
+              onClick={handleReset}
+              className="w-full sm:w-auto px-10 py-4 border border-zinc-500/50 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-zinc-500/10 transition-all opacity-70 hover:opacity-100"
+            >
+              {lang === 'en' ? 'New Diagnostic' : '新诊断'}
+            </button>
+          </div>
         </div>
       </div>
 
       <footer className="pt-32 pb-12 text-center">
          <button 
-           onClick={() => { setAnswers({}); setCurrentIdx(0); setStep('intro'); }} 
+           onClick={handleReset} 
            className="text-[10px] uppercase tracking-[0.5em] text-zinc-500 hover:text-current transition-all font-bold opacity-60 hover:opacity-100"
          >
-           Recalibrate Evolutionary Baseline
+           {t.recalibrate}
          </button>
       </footer>
     </div>
