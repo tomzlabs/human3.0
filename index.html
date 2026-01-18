@@ -1,17 +1,31 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <script>
+        // Defensive script to define tronlinkParams before any other script access
+        try {
+            if (!window.tronlinkParams) {
+                Object.defineProperty(window, 'tronlinkParams', {
+                    value: {},
+                    writable: true,
+                    configurable: true,
+                    enumerable: true
+                });
+            }
+        } catch (e) {
+            console.warn('Failed to define tronlinkParams:', e);
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Human 3.0 Diagnostic</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <script>
-      window.tronlinkParams = {};
-    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-color: #050505;
@@ -37,25 +51,29 @@
             color: var(--text-color);
             transition: background-color 0.4s ease, color 0.4s ease;
         }
+
         .serif {
             font-family: 'Playfair Display', serif;
         }
+
         .glass {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
             transition: background 0.4s ease, border 0.4s ease;
         }
+
         .gradient-text {
             background: linear-gradient(135deg, var(--text-color) 0%, var(--accent-muted) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
         .theme-transition {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
     </style>
-<script type="importmap">
+    <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.2.3",
@@ -67,7 +85,9 @@
 }
 </script>
 </head>
+
 <body>
     <div id="root"></div>
 </body>
+
 </html>
